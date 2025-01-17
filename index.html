@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruleta de la Suerte</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff9966, #ff5e62);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+        .wheel {
+            width: 300px;
+            height: 300px;
+            border: 10px solid #fff;
+            border-radius: 50%;
+            background: conic-gradient(
+                #ff0000 0deg 60deg,
+                #ffa500 60deg 120deg,
+                #ffff00 120deg 180deg,
+                #008000 180deg 240deg,
+                #0000ff 240deg 300deg,
+                #4b0082 300deg 360deg
+            );
+            position: absolute;
+            top: 0;
+            left: 0;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            transform: rotate(0deg);
+            transition: transform 4s cubic-bezier(0.1, 0.7, 0.1, 1);
+        }
+        .wheel::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(135deg, #56ab2f, #a8e063);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 20px;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎡 Ruleta de la Suerte 🎡</h1>
+    <div class="wheel-container">
+        <div class="wheel" id="wheel"></div>
+    </div>
+    <br>
+    <button onclick="spinWheel()">Girar Ruleta</button>
+    <div id="result">Resultado: </div>
+    <script>
+        let currentRotation = 0;
+
+        function spinWheel() {
+            const wheel = document.getElementById('wheel');
+            const resultDiv = document.getElementById('result');
+            const randomDegree = Math.floor(Math.random() * 360) + 1440; // At least 4 full rotations
+
+            currentRotation += randomDegree;
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+            setTimeout(() => {
+                const normalizedDegree = (currentRotation % 360 + 360) % 360; // Normalize to 0-360 range
+                let segment;
+
+                if (normalizedDegree >= 0 && normalizedDegree < 60) {
+                    segment = 'Rojo';
+                } else if (normalizedDegree >= 60 && normalizedDegree < 120) {
+                    segment = 'Naranja';
+                } else if (normalizedDegree >= 120 && normalizedDegree < 180) {
+                    segment = 'Amarillo';
+                } else if (normalizedDegree >= 180 && normalizedDegree < 240) {
+                    segment = 'Verde';
+                } else if (normalizedDegree >= 240 && normalizedDegree < 300) {
+                    segment = 'Azul';
+                } else {
+                    segment = 'Morado';
+                }
+
+                resultDiv.textContent = `Resultado: ${segment}`;
+            }, 4000); // Match transition duration
+        }
+    </script>
+</body>
+</html>
